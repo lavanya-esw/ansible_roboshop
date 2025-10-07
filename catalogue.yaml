@@ -1,6 +1,6 @@
 ---
 - name: setup catalogue server
-  hosts: 
+  hosts: catalogue
   become: yes
   tasks:
   - name: disable default nodejs
@@ -64,7 +64,7 @@
   - name: load products into mongodb
     ansible.builtin.shell: mongosh --host mongodb.awsdevops.fun </app/db/master-data.js
     when: catalogue_output | int < 0
-    
+
   - name: start and enable cataalogue
     ansible.builtin.service:
       name: catalogue

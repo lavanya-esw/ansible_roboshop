@@ -1,0 +1,65 @@
+---
+- name: Create ec2-instance and route-53 records
+  hosts: local
+  connection: local
+  vars:
+    ami_id: "ami-09c813fb71547fc4f"
+    sg_id: "sg-0dfa2ec6d3272ffeb"
+    domain_name: "awsdevops.fun"
+    zone_id: "Z02792703IESGDED1SCJO"
+    instances:
+      - mongodb
+  tasks:
+  - name: create ec2-instance
+    amazon.aws.ec2_instance:
+      name: "{{item}}"
+      instance_type: t2.micro
+      security_group: "{{sg_id}}"
+      
+      image_id: "{{ami_id}}"
+      tags:
+        Environment: "{{item}}"
+    loop: "{{instances}}"
+    register: instance_output
+
+  # - name: print the instance_output
+  #   ansible.builtin.debug:
+  #     msg: "{{instance_output}}"
+
+  # - name: print privtae_ip_address
+  #   debug:
+  #     msg: "{{item.instances[0].private_ip_address}}"
+  #   loop: "{{instance_output.results}}"
+
+  # - name: print public_ip_address
+  #   debug:
+  #     msg: "{{item.instances[0].public_ip_address}}"
+  #   loop: "{{instance_output.results}}"
+
+  - name: create and update route53 record
+    amazon.aws.route53:
+      state: present
+      zone: "{{domain_name}}"
+      record: "{{item.item}}.{{domain_name}}"
+      type: A
+      ttl: 1
+      value: "{{item.instances[0].private_ip_address}}"
+      overwrite: true
+      wait: true
+    loop: "{{instance_output.results}}"
+    when: item.item != "frontend"
+  
+  - name: create and update route53 record
+    amazon.aws.route53:
+      state: present
+      zone: "{{domain_name}}"
+      record: "{{domain_name}}"
+      type: A
+      ttl: 1
+      value: "{{item.instances[0].public_ip_address}}"
+      overwrite: true
+      wait: true
+    loop: "{{instance_output.results}}"
+    when: item.item == "frontend"
+
+

@@ -7,15 +7,18 @@
     ansible.builtin.copy:
       src: ./mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
+
   - name: install mongodb
     ansible.builtin.package:
       name: mongodb-org
       state: present
+
   - name: allowing internet access
     ansible.builtin.replace:
       path: '/etc/mongod.conf'
       regexp: '127.0.0.1'
       replace: '0.0.0.0'
+      
   - name: start and enable mongo service
     ansible.builtin.service:
       name: mongod

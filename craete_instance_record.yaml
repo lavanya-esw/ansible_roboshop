@@ -47,7 +47,6 @@
       overwrite: true
       wait: true
     loop: "{{instance_output.results}}"
-    when: item.item != "frontend"
   
   - name: create and update route53 record
     amazon.aws.route53:
@@ -59,7 +58,8 @@
       value: "{{item.instances[0].public_ip_address}}"
       overwrite: true
       wait: true
-    loop: "{{instance_output.results}}"
     when: item.item == "frontend"
+    loop: "{{instance_output.results}}"
+    
 
 

@@ -21,8 +21,8 @@
 
   - name: creating html directory to download the code
     ansible.builtin.file:
-    path: /usr/share/nginx/html
-    state: directory
+      path: /usr/share/nginx/html
+      state: directory
 
   - name: Remove existing temp directory
     ansible.builtin.file:
@@ -44,7 +44,7 @@
     ansible.builtin.copy:
       src: ./nginx.conf
       dest: /etc/nginx/nginx.conf
-      
+
   - name: start and enable nginx
     ansible.builtin.service:
       name: nginx

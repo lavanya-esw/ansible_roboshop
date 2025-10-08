@@ -45,9 +45,9 @@
       src: ./nginx.conf
       dest: /etc/nginx/nginx.conf
 
-  - name: start and enable nginx
+  - name: restart nginx
     ansible.builtin.service:
       name: nginx
+      state: restarted # restarted if you have already started earlier
       enabled: yes
-      state: started
   

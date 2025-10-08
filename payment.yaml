@@ -1,7 +1,7 @@
 ---
 - name: setup payment server
   hosts: payment
-  because: yes
+  become: yes
   tasks:
   - name: install python mosules
     ansible.builtin.package:

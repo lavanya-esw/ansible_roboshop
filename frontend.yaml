@@ -19,6 +19,16 @@
       path: /usr/share/nginx/html/
       state: absent
 
+  - name: creating html directory to download the code
+    ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory
+
+  - name: Remove existing temp directory
+    ansible.builtin.file:
+      path: /tmp/frontend.zip
+      state: absent
+
   - name: download the frontend code 
     ansible.builtin.get_url:
       url: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip 
@@ -29,10 +39,12 @@
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html
       remote_src: yes
+
   - name: copy nginx conifig
     ansible.builtin.copy:
       src: ./nginx.conf
       dest: /etc/nginx/nginx.conf
+      
   - name: start and enable nginx
     ansible.builtin.service:
       name: nginx

@@ -26,3 +26,9 @@
       regexp: 'protected-mode'
       line: 'protected-mode no'
 
+  - name: start enable service
+    ansible.builtin.service:
+      name: redis
+      enabled: yes
+      state: started
+

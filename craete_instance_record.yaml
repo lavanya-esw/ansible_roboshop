@@ -7,8 +7,6 @@
     sg_id: "sg-0dfa2ec6d3272ffeb"
     domain_name: "awsdevops.fun"
     zone_id: "Z02792703IESGDED1SCJO"
-    instances:
-      - mongodb
   tasks:
   - name: create ec2-instance
     amazon.aws.ec2_instance:

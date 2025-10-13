@@ -11,7 +11,7 @@ compose:
   # Use the private IP address to connect to the host
   # (note: this does not modify inventory_hostname, which is set via I(hostnames))
   ansible_host: private_ip_address
-# keyed_groups:
-#   - key: tags.Name
-#     prefix: "dynamic" # dynamic_frontend
-#     separator: "_"
+keyed_groups:
+  - key: tags.Name
+    prefix: "dynamic" # dynamic_frontend
+    separator: "_"
